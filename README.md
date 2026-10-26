@@ -121,6 +121,20 @@ is ever unreadable, it's copied aside as `settings.json.unreadable-<date>` rathe
 (with `Exec=` pointed at the install), and refreshes the icon cache and desktop database if
 `gtk-update-icon-cache` / `update-desktop-database` are present. Each run replaces the previous install.
 
+## Build a .deb (Debian, Ubuntu, Linux Mint)
+
+```bash
+./package-deb.sh          # artifacts/tunerfish_<version>_amd64.deb
+./package-deb.sh beta.1   # artifacts/tunerfish_<version>~beta.1_amd64.deb (a pre-release)
+sudo apt install ./artifacts/tunerfish_<version>_amd64.deb
+```
+
+The package installs the app to `/usr/lib/tunerfish` (self-contained, so .NET isn't needed), `tunerfish`
+on the PATH, the launcher and the icons, and depends on the distribution's `libmpv2` (Debian 12,
+Ubuntu 23.04, Linux Mint 22 or later). Remove it with `sudo apt remove tunerfish`; your settings are kept.
+Don't keep an `install.sh` copy as well: its launcher has the same name and hides the package's
+(run `./uninstall.sh` first).
+
 The launcher uses `Icon=tunerfish` and `StartupWMClass=tunerfish`; the app sets its X11 WM_CLASS to
 `tunerfish`, so the panel shows the TunerFish icon for the running window. If the menu still shows an
 old icon, log out and back in.

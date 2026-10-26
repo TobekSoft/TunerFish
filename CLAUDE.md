@@ -41,6 +41,7 @@ src/TunerFish.Desktop/    Avalonia UI only: App, Program (crash handler), AppInf
 branding/                 SVG masters (tunerfish.svg, tunerfish-logo.svg) + spare logo PNG exports. Not built.
 tunerfish.desktop         Launcher: Icon=tunerfish, StartupWMClass=tunerfish. install.sh rewrites Exec=.
 install.sh / uninstall.sh Per-user install to ~/.local/opt/tunerfish + hicolor icons + launcher (no sudo)
+package-deb.sh            .deb into artifacts/: self-contained in /usr/lib/tunerfish, Depends: libmpv2 (never bundled)
 tests/TunerFish.Tests/    xUnit v3: fake Jellyfin HTTP server fixture + real silent libmpv
   Support/                 FakeJellyfinServer, TestMedia (WAV tones + PNG made in code), TempDir,
                            VmHarness, Wait.UntilAsync, the "Audio engine" collection
