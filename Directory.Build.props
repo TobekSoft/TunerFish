@@ -1,0 +1,26 @@
+<Project>
+  <!-- Settings shared by every project in the solution. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <!-- Desktop app; don't nag about APIs that are unsupported on other platforms. -->
+    <NoWarn>$(NoWarn);CA1416</NoWarn>
+  </PropertyGroup>
+
+  <!--
+    Optional licences (Avalonia key, Six Labors licence file), kept outside the repo.
+    Looks for .licenses/Licenses.props in this folder or any folder above it, e.g.
+      <parent folder>/.licenses/Licenses.props
+    Override the location with the DEV_LICENSES_DIR environment variable.
+    Builds fine without it: core Avalonia needs no key, only the paid/community tooling does.
+  -->
+  <PropertyGroup>
+    <TobeksoftLicensesDir Condition="'$(TobeksoftLicensesDir)' == '' and '$(DEV_LICENSES_DIR)' != ''">$(DEV_LICENSES_DIR)</TobeksoftLicensesDir>
+    <_TobeksoftLicensesRoot Condition="'$(TobeksoftLicensesDir)' == ''">$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildThisFileDirectory)', '.licenses/Licenses.props'))</_TobeksoftLicensesRoot>
+    <TobeksoftLicensesDir Condition="'$(TobeksoftLicensesDir)' == '' and '$(_TobeksoftLicensesRoot)' != ''">$(_TobeksoftLicensesRoot)/.licenses</TobeksoftLicensesDir>
+  </PropertyGroup>
+  <Import Project="$(TobeksoftLicensesDir)/Licenses.props"
+          Condition="'$(TobeksoftLicensesDir)' != '' and Exists('$(TobeksoftLicensesDir)/Licenses.props')" />
+</Project>

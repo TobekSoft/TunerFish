@@ -1,0 +1,31 @@
+<Project>
+  <!--
+    Central package management: every NuGet version lives here, projects list packages without versions.
+    Rider's NuGet tool window updates this file directly.
+  -->
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <!-- Bump all core Avalonia packages together. Matches the other Tobeksoft app. -->
+    <AvaloniaVersion>12.1.1</AvaloniaVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="Avalonia" Version="$(AvaloniaVersion)" />
+    <PackageVersion Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
+    <PackageVersion Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
+    <!-- Versioned separately; development has stopped upstream, so this may be the last release. -->
+    <PackageVersion Include="Avalonia.Controls.DataGrid" Version="12.1.2" />
+
+    <!-- The app's log (Desktop only): daily files. Same packages as the other Tobeksoft app. -->
+    <PackageVersion Include="Serilog" Version="4.4.0" />
+    <PackageVersion Include="Serilog.Sinks.File" Version="7.0.0" />
+
+    <!-- Local data (the saved queue). Bundles its own native SQLite. -->
+    <PackageVersion Include="Microsoft.Data.Sqlite" Version="10.0.13" />
+
+    <!-- Tests (tests/TunerFish.Tests): xUnit v3 run through VSTest, for `dotnet test` and Rider. -->
+    <PackageVersion Include="xunit.v3.mtp-off" Version="4.0.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.1" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />
+  </ItemGroup>
+</Project>

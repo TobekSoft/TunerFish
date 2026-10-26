@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    All app logic: Jellyfin client, mpv playback, settings, local database, view models.
+    Deliberately has NO UI packages, so it builds and tests without Avalonia.
+  -->
+  <PropertyGroup>
+    <RootNamespace>TunerFish</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" />
+  </ItemGroup>
+</Project>

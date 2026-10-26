@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    xUnit tests of everything except the window: Jellyfin client (against a fake server),
+    real libmpv playback (silent), settings, the queue database and the view model.
+    Run with `dotnet test TunerFish.sln` or Rider's test explorer. Test media is generated in code.
+    Tests that need libmpv are tagged Category=Integration and skip themselves if it's missing.
+  -->
+  <PropertyGroup>
+    <!-- xUnit v3 test projects are executables. -->
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!--
+      xunit.v3.mtp-off is xUnit v3 without Microsoft.Testing.Platform: tests run through VSTest
+      (test SDK + xunit.runner.visualstudio), which plain `dotnet test` and Rider both use. The plain
+      xunit.v3 4.x package turns MTP on, and the .NET 10 SDK rejects that under classic `dotnet test`.
+    -->
+    <PackageReference Include="xunit.v3.mtp-off" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/TunerFish.Core/TunerFish.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+</Project>

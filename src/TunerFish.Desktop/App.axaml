@@ -1,0 +1,15 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="TunerFish.App"
+             RequestedThemeVariant="Default">
+  <!-- "Default" follows your desktop's light/dark setting. The Theme option in the app overrides it at startup. -->
+  <Application.Resources>
+    <!-- The theme's base text size (Fluent's default is 14). Explicit sizes in the views are scaled from it. -->
+    <x:Double x:Key="ControlContentThemeFontSize">11</x:Double>
+  </Application.Resources>
+  <Application.Styles>
+    <!-- Compact: smaller padding and control heights throughout. -->
+    <FluentTheme DensityStyle="Compact" />
+    <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
+  </Application.Styles>
+</Application>

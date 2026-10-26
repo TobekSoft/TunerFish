@@ -1,0 +1,570 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:TunerFish.ViewModels"
+        x:Class="TunerFish.Views.MainWindow"
+        Title="{Binding WindowTitle}"
+        Icon="avares://TunerFish/Assets/icon/tunerfish-256.png"
+        Width="1280" Height="800" MinWidth="960" MinHeight="520">
+
+  <Window.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="OverlayBrush" Color="#F3F3F3" />
+          <SolidColorBrush x:Key="WindowEdgeBrush" Color="#B0B0B0" />
+          <SolidColorBrush x:Key="AltRowBrush" Color="#F2F2F2" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="OverlayBrush" Color="#202020" />
+          <SolidColorBrush x:Key="WindowEdgeBrush" Color="#4A4A4A" />
+          <SolidColorBrush x:Key="AltRowBrush" Color="#1C1C1C" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+      <!-- Marks: heart = favourite, thumbs up = liked, thumbs down = hidden. Material Design icons (Apache 2.0). -->
+      <StreamGeometry x:Key="HeartOn">M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z</StreamGeometry>
+      <StreamGeometry x:Key="HeartOff">M12.1,18.55L12,18.65L11.89,18.55C7.14,14.24 4,11.39 4,8.5C4,6.5 5.5,5 7.5,5C9.04,5 10.54,6 11.07,7.36H12.93C13.46,6 14.96,5 16.5,5C18.5,5 20,6.5 20,8.5C20,11.39 16.86,14.24 12.1,18.55M16.5,3C14.76,3 13.09,3.81 12,5.08C10.91,3.81 9.24,3 7.5,3C4.42,3 2,5.41 2,8.5C2,12.27 5.4,15.36 10.55,20.03L12,21.35L13.45,20.03C18.6,15.36 22,12.27 22,8.5C22,5.41 19.58,3 16.5,3Z</StreamGeometry>
+      <StreamGeometry x:Key="ThumbUpOn">M23,10C23,8.89 22.1,8 21,8H14.68L15.64,3.43C15.66,3.33 15.67,3.22 15.67,3.11C15.67,2.7 15.5,2.32 15.23,2.05L14.17,1L7.59,7.58C7.22,7.95 7,8.45 7,9V19A2,2 0 0,0 9,21H18C18.83,21 19.54,20.5 19.84,19.78L22.86,12.73C22.95,12.5 23,12.26 23,12V10M1,21H5V9H1V21Z</StreamGeometry>
+      <StreamGeometry x:Key="ThumbUpOff">M5,9V21H1V9H5M9,21A2,2 0 0,1 7,19V9C7,8.45 7.22,7.95 7.59,7.59L14.17,1L15.23,2.06C15.5,2.33 15.67,2.7 15.67,3.11L15.64,3.43L14.69,8H21C22.11,8 23,8.9 23,10V12C23,12.26 22.95,12.5 22.86,12.73L19.84,19.78C19.54,20.5 18.83,21 18,21H9M9,19H18.03L21,12V10H12.21L13.34,4.68L9,9.03V19Z</StreamGeometry>
+      <StreamGeometry x:Key="ThumbDownOn">M19,15H23V3H19M15,3H6C5.17,3 4.46,3.5 4.16,4.22L1.14,11.27C1.05,11.5 1,11.74 1,12V14A2,2 0 0,0 3,16H9.31L8.36,20.57C8.34,20.67 8.33,20.77 8.33,20.88C8.33,21.3 8.5,21.67 8.77,21.94L9.83,23L16.41,16.41C16.78,16.05 17,15.55 17,15V5C17,3.89 16.1,3 15,3Z</StreamGeometry>
+      <StreamGeometry x:Key="Tune">M3,17V19H9V17H3M3,5V7H13V5H3M13,21V19H21V17H13V15H11V21H13M7,9V11H3V13H7V15H9V9H7M21,13V11H11V13H21M15,9H17V7H21V5H17V3H15V9Z</StreamGeometry>
+      <StreamGeometry x:Key="ThumbDownOff">M19,15V3H23V15H19M15,3A2,2 0 0,1 17,5V15C17,15.55 16.78,16.05 16.41,16.41L9.83,23L8.77,21.94C8.5,21.67 8.33,21.3 8.33,20.88L8.36,20.57L9.31,16H3C1.89,16 1,15.1 1,14V12C1,11.74 1.05,11.5 1.14,11.27L4.16,4.22C4.46,3.5 5.17,3 6,3H15M15,5H5.97L3,12V14H11.78L10.65,19.32L15,14.97V5Z</StreamGeometry>
+    </ResourceDictionary>
+  </Window.Resources>
+
+  <Window.Styles>
+    <Style Selector="Window[WindowState=Maximized] Border#WindowFrame">
+      <Setter Property="BorderThickness" Value="0" />
+    </Style>
+    <Style Selector="GridSplitter">
+      <Setter Property="Background" Value="#22888888" />
+    </Style>
+    <!-- The DataGrid theme sets its own sizes; bring the track grid down to the base text size. -->
+    <Style Selector="DataGrid#TrackGrid DataGridColumnHeader, DataGrid#TrackGrid DataGridCell, DataGrid#TrackGrid DataGridCell TextBlock">
+      <Setter Property="TextElement.FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
+    </Style>
+    <!-- Track rows as tight as the artist list: no theme minimum height, 4 px above and below the text. -->
+    <Style Selector="DataGrid#TrackGrid DataGridCell">
+      <Setter Property="MinHeight" Value="0" />
+    </Style>
+    <Style Selector="DataGrid#TrackGrid DataGridCell TextBlock">
+      <Setter Property="Margin" Value="12,4" />
+    </Style>
+    <!-- Striped rows, the same as the artist list. -->
+    <Style Selector="DataGrid#TrackGrid DataGridRow:nth-child(2n)">
+      <Setter Property="Background" Value="{DynamicResource AltRowBrush}" />
+    </Style>
+    <!-- Mark icons: small beside names, a little larger on the album's buttons. -->
+    <Style Selector="PathIcon.mark">
+      <Setter Property="Width" Value="11" />
+      <Setter Property="Height" Value="11" />
+      <Setter Property="Opacity" Value="0.7" />
+    </Style>
+    <Style Selector="Button.markButton">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Padding" Value="6" />
+    </Style>
+    <Style Selector="Button.markButton PathIcon">
+      <Setter Property="Width" Value="16" />
+      <Setter Property="Height" Value="16" />
+    </Style>
+    <!-- Search scope chips: small, side by side under the search box. -->
+    <Style Selector="ToggleButton.scope">
+      <Setter Property="FontSize" Value="11" />
+      <Setter Property="Padding" Value="8,2" />
+      <Setter Property="MinHeight" Value="0" />
+    </Style>
+    <Style Selector="PathIcon.tone">
+      <Setter Property="Width" Value="16" />
+      <Setter Property="Height" Value="16" />
+    </Style>
+    <Style Selector="PathIcon.tone.flat">
+      <Setter Property="Opacity" Value="0.55" />
+    </Style>
+    <Style Selector="Button.transport">
+      <Setter Property="MinWidth" Value="40" />
+      <Setter Property="HorizontalContentAlignment" Value="Center" />
+      <Setter Property="FontSize" Value="14" />
+    </Style>
+
+    <!-- Queue rows: played ones fade back, the current one stands out, ✕ shows on hover. -->
+    <Style Selector="Grid.queueRow.played">
+      <Setter Property="Opacity" Value="0.45" />
+    </Style>
+    <Style Selector="Grid.queueRow.current TextBlock.queueTitle">
+      <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+    <Style Selector="Button.remove">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Padding" Value="6,2" />
+      <Setter Property="Opacity" Value="0" />
+    </Style>
+    <Style Selector="ListBoxItem:pointerover Button.remove, ListBoxItem:selected Button.remove">
+      <Setter Property="Opacity" Value="0.8" />
+    </Style>
+  </Window.Styles>
+
+  <!-- A thin edge, so the dark window stands out from a dark desktop. Hidden when maximised. -->
+  <Border x:Name="WindowFrame" BorderThickness="1" BorderBrush="{DynamicResource WindowEdgeBrush}">
+    <Grid RowDefinitions="Auto,*,Auto">
+
+      <!-- ===================== Top bar ===================== -->
+      <Border Grid.Row="0" Padding="12,6" BorderThickness="0,0,0,1" BorderBrush="#22888888">
+        <DockPanel>
+          <TextBlock DockPanel.Dock="Left" Text="{Binding AppName}" FontSize="14" FontWeight="SemiBold"
+                     VerticalAlignment="Center" Margin="0,0,16,0" />
+          <!-- Menu. Options… and Columns… open their panels from this button (wired up in code-behind). -->
+          <Button x:Name="MenuButton" DockPanel.Dock="Right" Content="☰" VerticalAlignment="Center"
+                  ToolTip.Tip="Menu">
+            <Button.Flyout>
+              <MenuFlyout Placement="BottomEdgeAlignedRight">
+                <MenuItem x:Name="OptionsMenuItem" Header="Options…" />
+                <MenuItem x:Name="ColumnsMenuItem" Header="Columns…" />
+                <!-- Header ("About TunerFish…") is set from AppInfo in code. -->
+                <MenuItem x:Name="LogFolderMenuItem" Header="Open log folder" />
+                <MenuItem x:Name="AboutMenuItem" />
+                <Separator />
+                <MenuItem Header="Sign out" Command="{Binding SignOutCommand}" />
+              </MenuFlyout>
+            </Button.Flyout>
+            <FlyoutBase.AttachedFlyout>
+              <Flyout Placement="BottomEdgeAlignedRight">
+                <StackPanel Spacing="8" Width="300">
+                  <StackPanel Orientation="Horizontal" Spacing="10">
+                    <TextBlock Text="Theme" VerticalAlignment="Center" />
+                    <ComboBox SelectedIndex="{Binding ThemeIndex}" MinWidth="120">
+                      <ComboBoxItem>Light</ComboBoxItem>
+                      <ComboBoxItem>Dark</ComboBoxItem>
+                      <ComboBoxItem>System</ComboBoxItem>
+                    </ComboBox>
+                  </StackPanel>
+                  <Separator />
+                  <CheckBox Content="Single click plays album" IsChecked="{Binding SingleClickPlaysAlbum}" />
+                  <CheckBox Content="Show hidden artists and albums" IsChecked="{Binding ShowHidden}" />
+                  <CheckBox Content="Clear queue on exit" IsChecked="{Binding ClearQueueOnExit}"
+                            ToolTip.Tip="Otherwise the queue and the place in the track are kept for next time." />
+                  <TextBlock TextWrapping="Wrap" Opacity="0.7" FontSize="10"
+                             Text="Artists and albums are filed by their sort name in Jellyfin. To file one differently, change its Sort name in Jellyfin's metadata editor." />
+                  <Separator />
+                  <!-- Server addresses: re-checked each time the panel opens (code-behind). -->
+                  <TextBlock Text="Server addresses" FontWeight="SemiBold" />
+                  <TextBlock TextWrapping="Wrap" Opacity="0.7" FontSize="10"
+                             Text="Tried in this order; the first that answers is used. Add one for each way you reach the same server, e.g. home network then NetBird." />
+                  <ItemsControl ItemsSource="{Binding ServerAddresses}">
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate>
+                        <Grid ColumnDefinitions="*,Auto,Auto" Margin="0,2">
+                          <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding Address}" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Address}" />
+                            <TextBlock Text="{Binding StatusText}" Opacity="0.65" FontSize="10" />
+                          </StackPanel>
+                          <Button Grid.Column="1" Content="↑" Command="{Binding MoveUpCommand}" IsVisible="{Binding CanMoveUp}"
+                                  Background="Transparent" Padding="6,2" VerticalAlignment="Center" ToolTip.Tip="Try this one earlier" />
+                          <Button Grid.Column="2" Content="✕" Command="{Binding RemoveCommand}" IsVisible="{Binding CanRemove}"
+                                  Background="Transparent" Padding="6,2" VerticalAlignment="Center" ToolTip.Tip="Remove" />
+                        </Grid>
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ItemsControl>
+                  <Grid ColumnDefinitions="*,Auto" ColumnSpacing="6">
+                    <TextBox Grid.Column="0" Text="{Binding NewServerAddress}" PlaceholderText="e.g. 100.64.0.5:8096">
+                      <TextBox.KeyBindings>
+                        <KeyBinding Gesture="Enter" Command="{Binding AddServerAddressCommand}" />
+                      </TextBox.KeyBindings>
+                    </TextBox>
+                    <Button Grid.Column="1" Content="Add" Command="{Binding AddServerAddressCommand}" />
+                  </Grid>
+                </StackPanel>
+              </Flyout>
+            </FlyoutBase.AttachedFlyout>
+          </Button>
+          <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+            <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsBusy}" Width="60" MinWidth="60" />
+            <TextBlock Text="{Binding Status}" Opacity="0.75" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+          </StackPanel>
+        </DockPanel>
+      </Border>
+
+      <!-- ===================== Library ===================== -->
+      <Grid x:Name="MainGrid" Grid.Row="1" ColumnDefinitions="260,4,*,4,320">
+
+        <!-- Album artists -->
+        <DockPanel Grid.Column="0">
+          <!-- The whole library, or a view of your own marks and plays. Not saved. -->
+          <ComboBox DockPanel.Dock="Top" Margin="8,8,8,0" HorizontalAlignment="Stretch"
+                    ItemsSource="{Binding ViewLabels}" SelectedIndex="{Binding ViewIndex}" ToolTip.Tip="Show" />
+          <TextBox DockPanel.Dock="Top" Margin="8,8,8,4" PlaceholderText="Search"
+                   Text="{Binding ArtistFilter}" />
+          <!-- What the search looks in, any combination (at least one stays on). Remembered. -->
+          <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="4" Margin="8,0,8,6">
+            <ToggleButton Classes="scope" Content="Artists" IsChecked="{Binding SearchArtists}" ToolTip.Tip="Search artist names" />
+            <ToggleButton Classes="scope" Content="Albums" IsChecked="{Binding SearchAlbums}" ToolTip.Tip="Search album titles" />
+            <ToggleButton Classes="scope" Content="Tracks" IsChecked="{Binding SearchTracks}" ToolTip.Tip="Search track titles" />
+          </StackPanel>
+          <TextBlock DockPanel.Dock="Top" Text="{Binding ArtistPaneNote}" IsVisible="{Binding ArtistPaneNote, Converter={x:Static ObjectConverters.IsNotNull}}"
+                     Margin="12,4" TextWrapping="Wrap" Opacity="0.55" />
+          <!-- A–Z jump bar: scrolls the list, never selects or filters -->
+          <ItemsControl DockPanel.Dock="Right" ItemsSource="{Binding JumpGroups}" Margin="0,0,2,4" Width="26">
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate>
+                <UniformGrid Columns="1" />
+              </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Button Content="{Binding Group}" Command="{Binding JumpCommand}" IsEnabled="{Binding HasArtists}"
+                        Background="Transparent" Padding="0" MinHeight="0" FontSize="11"
+                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                        HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                        Focusable="False" Cursor="Hand" />
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+          <ListBox x:Name="ArtistList" ItemsSource="{Binding Artists}" SelectedItem="{Binding SelectedArtist}"
+                   Background="Transparent">
+            <ListBox.Styles>
+              <Style Selector="ListBoxItem">
+                <Setter Property="Padding" Value="8,4" />
+                <Setter Property="MinHeight" Value="0" />
+              </Style>
+              <!-- Striped rows, the same as the track grid. -->
+              <Style Selector="ListBoxItem:nth-child(2n)">
+                <Setter Property="Background" Value="{DynamicResource AltRowBrush}" />
+              </Style>
+            </ListBox.Styles>
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <Grid ColumnDefinitions="*,Auto" Background="Transparent">
+                  <Grid.ContextMenu>
+                    <ContextMenu>
+                      <MenuItem Header="Favourite" Command="{Binding ToggleFavouriteCommand}">
+                        <MenuItem.Icon>
+                          <Panel>
+                            <PathIcon Data="{StaticResource HeartOn}" IsVisible="{Binding IsFavourite}" />
+                            <PathIcon Data="{StaticResource HeartOff}" IsVisible="{Binding !IsFavourite}" />
+                          </Panel>
+                        </MenuItem.Icon>
+                      </MenuItem>
+                      <MenuItem Header="Like" Command="{Binding ToggleLikeCommand}">
+                        <MenuItem.Icon>
+                          <Panel>
+                            <PathIcon Data="{StaticResource ThumbUpOn}" IsVisible="{Binding IsLiked}" />
+                            <PathIcon Data="{StaticResource ThumbUpOff}" IsVisible="{Binding !IsLiked}" />
+                          </Panel>
+                        </MenuItem.Icon>
+                      </MenuItem>
+                      <MenuItem Header="{Binding HideLabel}" Command="{Binding ToggleHiddenCommand}">
+                        <MenuItem.Icon>
+                          <Panel>
+                            <PathIcon Data="{StaticResource ThumbDownOn}" IsVisible="{Binding IsHidden}" />
+                            <PathIcon Data="{StaticResource ThumbDownOff}" IsVisible="{Binding !IsHidden}" />
+                          </Panel>
+                        </MenuItem.Icon>
+                      </MenuItem>
+                    </ContextMenu>
+                  </Grid.ContextMenu>
+                  <StackPanel Grid.Column="0">
+                    <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+                    <!-- What a search found it by: an album, or "Track (Album)". -->
+                    <TextBlock Text="{Binding Note}" IsVisible="{Binding Note, Converter={x:Static ObjectConverters.IsNotNull}}"
+                               FontSize="11" Opacity="0.6" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Note}" />
+                  </StackPanel>
+                  <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="3" Margin="6,0,0,0"
+                              VerticalAlignment="Center" IsVisible="{Binding HasMarks}">
+                    <PathIcon Classes="mark" Data="{StaticResource HeartOn}" IsVisible="{Binding IsFavourite}" ToolTip.Tip="Favourite" />
+                    <PathIcon Classes="mark" Data="{StaticResource ThumbUpOn}" IsVisible="{Binding IsLiked}" ToolTip.Tip="Liked" />
+                    <PathIcon Classes="mark" Data="{StaticResource ThumbDownOn}" IsVisible="{Binding IsHidden}" ToolTip.Tip="Hidden" />
+                  </StackPanel>
+                </Grid>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </DockPanel>
+
+        <GridSplitter Grid.Column="1" ResizeDirection="Columns" />
+
+        <Grid x:Name="RightGrid" Grid.Column="2" RowDefinitions="*,4,300">
+
+          <!-- Albums of the selected album artist -->
+          <DockPanel Grid.Row="0">
+            <DockPanel DockPanel.Dock="Top" Margin="14,10,14,4">
+              <!-- Album art size and sort order. The negative margin keeps them from making the header taller. -->
+              <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="10" Margin="16,-12,0,-12"
+                          VerticalAlignment="Center">
+                <Slider Width="140" VerticalAlignment="Center"
+                        Minimum="{x:Static vm:MainViewModel.MinAlbumArtSize}"
+                        Maximum="{x:Static vm:MainViewModel.MaxAlbumArtSize}"
+                        Value="{Binding AlbumArtSize}" ToolTip.Tip="Album art size" />
+                <TextBlock Text="Sort albums" VerticalAlignment="Center" Opacity="0.8" Margin="6,0,0,0" />
+                <ComboBox SelectedIndex="{Binding AlbumSortIndex}" MinWidth="160" VerticalAlignment="Center"
+                          IsEnabled="{Binding !ShowingViewAlbums}">
+                  <ComboBoxItem>Title</ComboBoxItem>
+                  <ComboBoxItem>Year (oldest first)</ComboBoxItem>
+                  <ComboBoxItem>Year (newest first)</ComboBoxItem>
+                </ComboBox>
+              </StackPanel>
+              <StackPanel Orientation="Horizontal" Spacing="12">
+                <!-- In a view, with one of its artists picked: back to the view's albums. -->
+                <Button Content="{Binding View, StringFormat='‹  {0}'}" Command="{Binding ShowViewAlbumsCommand}"
+                        VerticalAlignment="Center" Padding="8,2">
+                  <Button.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                      <Binding Path="InView" />
+                      <Binding Path="!ShowingViewAlbums" />
+                    </MultiBinding>
+                  </Button.IsVisible>
+                </Button>
+                <TextBlock Text="{Binding AlbumsHeader}" FontSize="17" FontWeight="SemiBold"
+                           TextTrimming="CharacterEllipsis" />
+                <TextBlock Text="{Binding AlbumCountText}" Opacity="0.6" VerticalAlignment="Bottom" Margin="0,0,0,3" />
+              </StackPanel>
+            </DockPanel>
+            <TextBlock DockPanel.Dock="Top" Text="{Binding AlbumPaneNote}" IsVisible="{Binding AlbumPaneNote, Converter={x:Static ObjectConverters.IsNotNull}}"
+                       Margin="14,8" TextWrapping="Wrap" Opacity="0.55" />
+            <!-- An artist picked in Favourites, Liked or Hidden: just the view's albums of it, or all. -->
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10" Margin="14,0,14,2"
+                        IsVisible="{Binding AlbumsLimited}">
+              <TextBlock Text="{Binding AlbumsLimitText}" Opacity="0.65" VerticalAlignment="Center" />
+              <Button Content="{Binding ShowAllAlbumsLabel}" Command="{Binding ToggleShowAllAlbumsCommand}" Padding="8,2" />
+            </StackPanel>
+            <ListBox x:Name="AlbumList" ItemsSource="{Binding Albums}" SelectedItem="{Binding SelectedAlbum}"
+                     Background="Transparent" Padding="8"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+              <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <WrapPanel />
+                </ItemsPanelTemplate>
+              </ListBox.ItemsPanel>
+              <ListBox.ItemTemplate>
+                <DataTemplate>
+                  <StackPanel Width="{Binding $parent[ListBox].DataContext.AlbumArtSize}" Spacing="3" Margin="2"
+                              Background="Transparent">
+                    <StackPanel.ContextMenu>
+                      <ContextMenu>
+                        <MenuItem Header="Play" Command="{Binding PlayCommand}" />
+                        <MenuItem Header="Add to queue" Command="{Binding QueueCommand}" />
+                        <Separator />
+                        <MenuItem Header="Favourite" Command="{Binding ToggleFavouriteCommand}">
+                          <MenuItem.Icon>
+                            <Panel>
+                              <PathIcon Data="{StaticResource HeartOn}" IsVisible="{Binding IsFavourite}" />
+                              <PathIcon Data="{StaticResource HeartOff}" IsVisible="{Binding !IsFavourite}" />
+                            </Panel>
+                          </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Like" Command="{Binding ToggleLikeCommand}">
+                          <MenuItem.Icon>
+                            <Panel>
+                              <PathIcon Data="{StaticResource ThumbUpOn}" IsVisible="{Binding IsLiked}" />
+                              <PathIcon Data="{StaticResource ThumbUpOff}" IsVisible="{Binding !IsLiked}" />
+                            </Panel>
+                          </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="{Binding HideLabel}" Command="{Binding ToggleHiddenCommand}">
+                          <MenuItem.Icon>
+                            <Panel>
+                              <PathIcon Data="{StaticResource ThumbDownOn}" IsVisible="{Binding IsHidden}" />
+                              <PathIcon Data="{StaticResource ThumbDownOff}" IsVisible="{Binding !IsHidden}" />
+                            </Panel>
+                          </MenuItem.Icon>
+                        </MenuItem>
+                      </ContextMenu>
+                    </StackPanel.ContextMenu>
+                    <Panel Height="{Binding $parent[ListBox].DataContext.AlbumArtSize}" ClipToBounds="True">
+                      <Border Background="#1A888888" CornerRadius="4">
+                        <TextBlock Text="♪" FontSize="52" Opacity="0.35"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center" />
+                      </Border>
+                      <Image Source="{Binding Cover}" Stretch="UniformToFill" />
+                    </Panel>
+                    <TextBlock Text="{Binding Title}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
+                               ToolTip.Tip="{Binding Title}" />
+                    <Grid ColumnDefinitions="*,Auto">
+                      <TextBlock Grid.Column="0" Text="{Binding Caption}" Opacity="0.65" TextTrimming="CharacterEllipsis"
+                                 ToolTip.Tip="{Binding Caption}" />
+                      <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="3" Margin="4,0,0,0"
+                                  VerticalAlignment="Center" IsVisible="{Binding HasMarks}">
+                        <PathIcon Classes="mark" Data="{StaticResource HeartOn}" IsVisible="{Binding IsFavourite}" ToolTip.Tip="Favourite" />
+                        <PathIcon Classes="mark" Data="{StaticResource ThumbUpOn}" IsVisible="{Binding IsLiked}" ToolTip.Tip="Liked" />
+                        <PathIcon Classes="mark" Data="{StaticResource ThumbDownOn}" IsVisible="{Binding IsHidden}" ToolTip.Tip="Hidden" />
+                      </StackPanel>
+                    </Grid>
+                  </StackPanel>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
+          </DockPanel>
+
+          <GridSplitter Grid.Row="1" ResizeDirection="Rows" />
+
+          <!-- Tracks of the selected album -->
+          <DockPanel Grid.Row="2">
+            <DockPanel DockPanel.Dock="Top" Margin="14,8,14,6">
+              <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="6">
+                <!-- The album's marks: heart, thumbs up, thumbs down (hide). -->
+                <StackPanel Orientation="Horizontal" Spacing="0" Margin="0,0,8,0"
+                            IsVisible="{Binding SelectedAlbum, Converter={x:Static ObjectConverters.IsNotNull}}">
+                  <Button Classes="markButton" Command="{Binding SelectedAlbum.ToggleFavouriteCommand}" ToolTip.Tip="Favourite">
+                    <Panel>
+                      <PathIcon Data="{StaticResource HeartOn}" IsVisible="{Binding SelectedAlbum.IsFavourite}" />
+                      <PathIcon Data="{StaticResource HeartOff}" IsVisible="{Binding !SelectedAlbum.IsFavourite}" />
+                    </Panel>
+                  </Button>
+                  <Button Classes="markButton" Command="{Binding SelectedAlbum.ToggleLikeCommand}" ToolTip.Tip="Like">
+                    <Panel>
+                      <PathIcon Data="{StaticResource ThumbUpOn}" IsVisible="{Binding SelectedAlbum.IsLiked}" />
+                      <PathIcon Data="{StaticResource ThumbUpOff}" IsVisible="{Binding !SelectedAlbum.IsLiked}" />
+                    </Panel>
+                  </Button>
+                  <Button Classes="markButton" Command="{Binding SelectedAlbum.ToggleHiddenCommand}" ToolTip.Tip="{Binding SelectedAlbum.HideLabel}">
+                    <Panel>
+                      <PathIcon Data="{StaticResource ThumbDownOn}" IsVisible="{Binding SelectedAlbum.IsHidden}" />
+                      <PathIcon Data="{StaticResource ThumbDownOff}" IsVisible="{Binding !SelectedAlbum.IsHidden}" />
+                    </Panel>
+                  </Button>
+                </StackPanel>
+                <Button Content="+  Add to queue" Command="{Binding QueueSelectedAlbumCommand}" />
+                <Button Content="▶  Play album" Command="{Binding PlaySelectedAlbumCommand}" />
+              </StackPanel>
+              <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                <TextBlock Text="{Binding SelectedAlbum.Title}" FontSize="14" FontWeight="SemiBold"
+                           TextTrimming="CharacterEllipsis" />
+                <TextBlock Text="{Binding SelectedAlbum.YearText}" Opacity="0.6" VerticalAlignment="Center" />
+              </StackPanel>
+            </DockPanel>
+            <!-- Columns are created in code so they can be shown, hidden, reordered and remembered. -->
+            <DataGrid x:Name="TrackGrid" ItemsSource="{Binding Tracks}"
+                      IsReadOnly="True" SelectionMode="Single"
+                      CanUserReorderColumns="True" CanUserResizeColumns="True" CanUserSortColumns="False"
+                      GridLinesVisibility="None" HeadersVisibility="Column" />
+          </DockPanel>
+        </Grid>
+
+        <GridSplitter Grid.Column="3" ResizeDirection="Columns" />
+
+        <!-- Play queue -->
+        <DockPanel Grid.Column="4">
+          <DockPanel DockPanel.Dock="Top" Margin="14,10,10,4">
+            <Button DockPanel.Dock="Right" Content="Clear" Command="{Binding ClearQueueCommand}"
+                    IsEnabled="{Binding HasQueue}" ToolTip.Tip="Remove everything from the queue" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+              <TextBlock Text="Queue" FontSize="17" FontWeight="SemiBold" />
+              <TextBlock Text="{Binding QueueSummaryText}" Opacity="0.6" VerticalAlignment="Bottom" Margin="0,0,0,3" />
+            </StackPanel>
+          </DockPanel>
+          <Panel>
+            <TextBlock IsVisible="{Binding !HasQueue}" Margin="14,8" TextWrapping="Wrap" Opacity="0.55"
+                       Text="Nothing queued. Double-click an album to play it, or right-click an album or track to add it here." />
+            <!-- Drag a row to reorder; double-click to play; Delete removes. Wired up in code-behind. -->
+            <ListBox x:Name="QueueList" ItemsSource="{Binding Queue}" Background="Transparent"
+                     SelectionMode="Single" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+              <ListBox.Styles>
+                <Style Selector="ListBoxItem">
+                  <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                  <Setter Property="Padding" Value="8,4,4,4" />
+                </Style>
+              </ListBox.Styles>
+              <ListBox.ItemTemplate>
+                <DataTemplate>
+                  <Grid Classes="queueRow" Classes.played="{Binding IsPlayed}" Classes.current="{Binding IsCurrent}"
+                        ColumnDefinitions="18,*,Auto,Auto" Background="Transparent">
+                    <Grid.ContextMenu>
+                      <ContextMenu>
+                        <MenuItem Header="Play" Command="{Binding PlayCommand}" />
+                        <MenuItem Header="Remove from queue" Command="{Binding RemoveCommand}" />
+                        <MenuItem Header="{Binding RemoveAlbumLabel}" Command="{Binding RemoveAlbumCommand}"
+                                  IsVisible="{Binding RemoveAlbumLabel, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                      </ContextMenu>
+                    </Grid.ContextMenu>
+                    <TextBlock Grid.Column="0" Text="{Binding NowGlyph}" VerticalAlignment="Center" FontSize="10" />
+                    <StackPanel Grid.Column="1" Spacing="1" VerticalAlignment="Center">
+                      <TextBlock Classes="queueTitle" Text="{Binding Title}" TextTrimming="CharacterEllipsis"
+                                 ToolTip.Tip="{Binding Title}" />
+                      <TextBlock Text="{Binding Subtitle}" FontSize="10" Opacity="0.65" TextTrimming="CharacterEllipsis" />
+                    </StackPanel>
+                    <TextBlock Grid.Column="2" Text="{Binding Length}" Opacity="0.65" Margin="8,0,2,0"
+                               VerticalAlignment="Center" />
+                    <Button Grid.Column="3" Classes="remove" Content="✕" Command="{Binding RemoveCommand}"
+                            VerticalAlignment="Center" ToolTip.Tip="Remove from queue" />
+                  </Grid>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
+          </Panel>
+        </DockPanel>
+      </Grid>
+
+      <!-- ===================== Now playing ===================== -->
+      <Border Grid.Row="2" Padding="12,10" BorderThickness="0,1,0,0" BorderBrush="#22888888">
+        <Grid ColumnDefinitions="Auto,280,Auto,*,Auto,140,Auto">
+          <Panel Grid.Column="0" Width="56" Height="56" Margin="0,0,12,0" ClipToBounds="True">
+            <Border Background="#1A888888" CornerRadius="3" />
+            <Image Source="{Binding NowPlayingCover}" Stretch="UniformToFill" />
+          </Panel>
+          <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+            <TextBlock Text="{Binding NowPlayingTitle}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+            <TextBlock Text="{Binding NowPlayingSubtitle}" Opacity="0.7" TextTrimming="CharacterEllipsis" />
+          </StackPanel>
+          <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6" Margin="12,0" VerticalAlignment="Center">
+            <Button Classes="transport" Content="⏮" Command="{Binding PreviousCommand}" ToolTip.Tip="Previous" />
+            <Button Classes="transport" Content="{Binding PlayPauseGlyph}" Command="{Binding TogglePauseCommand}"
+                    MinWidth="48" ToolTip.Tip="Play / pause (Space)" />
+            <Button Classes="transport" Content="⏭" Command="{Binding NextCommand}" ToolTip.Tip="Next" />
+          </StackPanel>
+          <Grid Grid.Column="3" ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center">
+            <TextBlock Grid.Column="0" Text="{Binding PositionText}" VerticalAlignment="Center" Margin="0,0,10,0"
+                       MinWidth="40" TextAlignment="Right" />
+            <Slider x:Name="SeekSlider" Grid.Column="1" Minimum="0"
+                    Maximum="{Binding Duration}" Value="{Binding Position}" />
+            <TextBlock Grid.Column="2" Text="{Binding DurationText}" VerticalAlignment="Center" Margin="10,0,0,0"
+                       MinWidth="40" />
+          </Grid>
+          <TextBlock Grid.Column="4" Text="Vol" Opacity="0.7" VerticalAlignment="Center" Margin="16,0,8,0" />
+          <Slider Grid.Column="5" Minimum="0" Maximum="100" Value="{Binding Volume}" VerticalAlignment="Center" />
+          <!-- Bass and treble: heard at once while dragging. The icon is dimmed while flat. -->
+          <Button Grid.Column="6" Background="Transparent" Padding="6" Margin="8,0,0,0" VerticalAlignment="Center"
+                  ToolTip.Tip="{Binding ToneTip}">
+            <PathIcon Classes="tone" Classes.flat="{Binding IsToneFlat}" Data="{StaticResource Tune}" />
+            <Button.Flyout>
+              <Flyout Placement="TopEdgeAlignedRight">
+                <StackPanel Spacing="4" Width="300">
+                  <TextBlock Text="Sound" FontWeight="SemiBold" />
+                  <Grid ColumnDefinitions="56,*,56" RowDefinitions="Auto,Auto">
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Bass" VerticalAlignment="Center" />
+                    <Slider Grid.Row="0" Grid.Column="1" Minimum="-12" Maximum="12" TickFrequency="1"
+                            IsSnapToTickEnabled="True" Value="{Binding Bass}" />
+                    <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding BassLabel}" VerticalAlignment="Center"
+                               TextAlignment="Right" />
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Treble" VerticalAlignment="Center" />
+                    <Slider Grid.Row="1" Grid.Column="1" Minimum="-12" Maximum="12" TickFrequency="1"
+                            IsSnapToTickEnabled="True" Value="{Binding Treble}" />
+                    <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding TrebleLabel}" VerticalAlignment="Center"
+                               TextAlignment="Right" />
+                  </Grid>
+                  <Button Content="Flat" Command="{Binding FlatToneCommand}" IsEnabled="{Binding !IsToneFlat}" />
+                </StackPanel>
+              </Flyout>
+            </Button.Flyout>
+          </Button>
+        </Grid>
+      </Border>
+
+      <!-- ===================== Sign in (covers everything until connected) ===================== -->
+      <Border Grid.RowSpan="3" IsVisible="{Binding !IsLoggedIn}" Background="{DynamicResource OverlayBrush}">
+        <StackPanel Width="380" VerticalAlignment="Center" Spacing="10">
+          <Image Source="avares://TunerFish/Assets/logo/tunerfish-logo-512.png"
+                 Width="160" Height="160" HorizontalAlignment="Center"
+                 RenderOptions.BitmapInterpolationMode="HighQuality" />
+          <TextBlock Text="Connect to Jellyfin" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,6"
+                     HorizontalAlignment="Center" />
+          <TextBox PlaceholderText="Server, e.g. 192.168.1.20:8096" Text="{Binding ServerUrl}" />
+          <TextBox PlaceholderText="User name" Text="{Binding UserName}" />
+          <TextBox PlaceholderText="Password" PasswordChar="•" Text="{Binding Password}"
+                   Classes="revealPasswordButton" />
+          <Button Content="Connect" Command="{Binding LoginCommand}" IsDefault="True"
+                  HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+          <TextBlock Text="{Binding Status}" TextWrapping="Wrap" Opacity="0.8" />
+        </StackPanel>
+      </Border>
+    </Grid>
+  </Border>
+</Window>

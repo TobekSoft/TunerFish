@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=TunerFish
+Comment=Album-first music player for Jellyfin
+Exec=TunerFish
+Icon=tunerfish
+Terminal=false
+Categories=AudioVideo;Audio;Player;
+StartupWMClass=tunerfish

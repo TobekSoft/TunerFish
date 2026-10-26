@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- The Avalonia desktop app. Only UI lives here; behaviour is in TunerFish.Core. -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <AssemblyName>TunerFish</AssemblyName>
+    <RootNamespace>TunerFish</RootNamespace>
+    <!-- Shown in the About window (AppInfo.Version). -->
+    <Version>0.9.11</Version>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <!-- Reflection bindings: view models expose some values as object (e.g. cover bitmaps). -->
+    <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" />
+    <PackageReference Include="Avalonia.Desktop" />
+    <PackageReference Include="Avalonia.Themes.Fluent" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" />
+    <PackageReference Include="Serilog" />
+    <PackageReference Include="Serilog.Sinks.File" />
+  </ItemGroup>
+
+  <!-- Assets/ is embedded (avares://TunerFish/Assets/...): icon/ (window icon; install.sh also puts
+       these in the icon theme) and logo/. PNGs only; the SVG masters live in branding/. -->
+  <ItemGroup>
+    <AvaloniaResource Include="Assets/**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../TunerFish.Core/TunerFish.Core.csproj" />
+  </ItemGroup>
+</Project>

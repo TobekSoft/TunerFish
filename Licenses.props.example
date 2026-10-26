@@ -1,0 +1,22 @@
+<Project>
+  <!--
+    TEMPLATE. Copy it OUTSIDE the repo, into a .licenses/ folder above it (it can be shared by
+    several solutions), e.g.
+      <parent folder>/.licenses/Licenses.props
+      <parent folder>/.licenses/sixlabors.lic   (only if a project uses ImageSharp)
+    Directory.Build.props finds it by searching upward. Never commit the real one.
+  -->
+  <PropertyGroup>
+    <!-- Avalonia Community licence key. The AVALONIA_LICENSE_KEY environment variable wins if set. -->
+    <AvaloniaLicenseKey Condition="'$(AvaloniaLicenseKey)' == ''">$(AVALONIA_LICENSE_KEY)</AvaloniaLicenseKey>
+    <AvaloniaLicenseKey Condition="'$(AvaloniaLicenseKey)' == ''">PASTE-YOUR-AVALONIA-KEY-HERE</AvaloniaLicenseKey>
+
+    <!-- ImageSharp 4.x reads its licence at build time. Only matters to projects that reference ImageSharp. -->
+    <SixLaborsLicenseFile Condition="'$(SixLaborsLicenseFile)' == '' and Exists('$(MSBuildThisFileDirectory)sixlabors.lic')">$(MSBuildThisFileDirectory)sixlabors.lic</SixLaborsLicenseFile>
+  </PropertyGroup>
+
+  <!-- Avalonia wants the key as an item on the executable project, and never blank. -->
+  <ItemGroup Condition="('$(OutputType)' == 'WinExe' or '$(OutputType)' == 'Exe') and '$(AvaloniaLicenseKey)' != ''">
+    <AvaloniaUILicenseKey Include="$(AvaloniaLicenseKey)" />
+  </ItemGroup>
+</Project>

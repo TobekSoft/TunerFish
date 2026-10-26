@@ -1,0 +1,29 @@
+# Build output
+bin/
+obj/
+artifacts/
+
+# Rider / JetBrains (keep shared run configs, ignore per-user state)
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+.idea/**/contentModel.xml
+.idea/**/indexLayout.xml
+*.DotSettings.user
+
+# Visual Studio / VS Code
+.vs/
+*.user
+.vscode/
+
+# Licences must never be committed (they live in ../.licenses, shared by all Tobeksoft apps)
+sixlabors.lic
+Licenses.props
+
+# Claude Code per-user settings
+.claude/settings.local.json
+
+# Stray settings file that turned up in the solution root (the real one is ~/.config/TunerFish/settings.json)
+/TunerFish/settings.json
